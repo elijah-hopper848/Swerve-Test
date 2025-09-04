@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
 /** An example command that uses an example subsystem. */
-public class DriveC extends Command {
+public class SwerveC extends Command {
   private final SwerveS m_DriveS;
 
   // private boolean isFinished = false;  
 
-  public DriveC(SwerveS subsystem) {
+  public SwerveC(SwerveS subsystem) {
     m_DriveS = subsystem;
     
     addRequirements(subsystem);

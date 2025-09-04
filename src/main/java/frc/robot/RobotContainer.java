@@ -5,8 +5,8 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.DriveC;
-import frc.robot.subsystems.DriveS;
+import frc.robot.commands.SwerveC;
+import frc.robot.subsystems.SwerveS;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DriveS m_DriveS = new DriveS();
+  private final SwerveS m_DriveS = new SwerveS();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public static final CommandXboxController m_driverController =
@@ -41,7 +41,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_DriveS.setDefaultCommand(new DriveC(m_DriveS));
+    m_DriveS.setDefaultCommand(new SwerveC(m_DriveS));
 
   }
 

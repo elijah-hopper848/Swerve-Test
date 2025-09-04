@@ -21,5 +21,10 @@ public final class Constants {
     public static final int driveFRMotorId = 11;
     public static final int driveBLMotorId = 12;
     public static final int driveBRMotorId = 13;
+
+    public static final int turningFLMotorId = 14;
+    public static final int turningFRMotorId = 15;
+    public static final int turningBLMotorId = 16;
+    public static final int turningBRMotorId = 17;
   }
 }

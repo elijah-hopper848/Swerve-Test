@@ -15,17 +15,17 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class DriveS extends SubsystemBase {
+public class SwerveS extends SubsystemBase {
   private static final SparkMaxConfig driveConfig = new SparkMaxConfig();
 
-  private final SparkMax driveFL = new SparkMax(Constants.MotorIds.driveFLMotorId, MotorType.kBrushless);
-  private final SparkMax driveFR = new SparkMax(Constants.MotorIds.driveFRMotorId, MotorType.kBrushless);
-  private final SparkMax driveBL = new SparkMax(Constants.MotorIds.driveBLMotorId, MotorType.kBrushless);
-  private final SparkMax driveBR = new SparkMax(Constants.MotorIds.driveBRMotorId, MotorType.kBrushless);
+  private static final SparkMax driveFL = new SparkMax(Constants.MotorIds.driveFLMotorId, MotorType.kBrushless);
+  private static final SparkMax driveFR = new SparkMax(Constants.MotorIds.driveFRMotorId, MotorType.kBrushless);
+  private static final SparkMax driveBL = new SparkMax(Constants.MotorIds.driveBLMotorId, MotorType.kBrushless);
+  private static final SparkMax driveBR = new SparkMax(Constants.MotorIds.driveBRMotorId, MotorType.kBrushless);
   
-  public DriveS() {
+  public SwerveS() {
     driveConfig.idleMode(IdleMode.kBrake);
-    driveConfig.smartCurrentLimit(159);
+    
     driveConfig.voltageCompensation(12);
 
     driveFL.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
