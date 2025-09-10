@@ -10,12 +10,12 @@ import frc.robot.RobotContainer;
 
 /** An example command that uses an example subsystem. */
 public class SwerveC extends Command {
-  private final SwerveS m_DriveS;
+  private final SwerveS m_SwerveS;
 
   // private boolean isFinished = false;  
 
   public SwerveC(SwerveS subsystem) {
-    m_DriveS = subsystem;
+    m_SwerveS = subsystem;
     
     addRequirements(subsystem);
   }
@@ -28,11 +28,11 @@ public class SwerveC extends Command {
   @Override
   public void execute() {
     //anyways
-    m_DriveS.drive(
-      RobotContainer.m_driverController.getLeftY(), 
-      RobotContainer.m_driverController.getRightY()
-    );
-    
+    m_SwerveS.drive(
+      RobotContainer.m_driverController.getLeftX(), 
+      RobotContainer.m_driverController.getLeftY(),
+      RobotContainer.m_driverController.getRightX()
+    );    
   }
 
   // Called once the command ends or is interrupted.

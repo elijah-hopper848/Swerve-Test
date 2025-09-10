@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final SwerveS m_DriveS = new SwerveS();
+  private final SwerveS m_SwerveS = new SwerveS();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   public static final CommandXboxController m_driverController =
@@ -41,8 +41,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_DriveS.setDefaultCommand(new SwerveC(m_DriveS));
-
+    m_SwerveS.setDefaultCommand(new SwerveC(m_SwerveS));
   }
 
   /**

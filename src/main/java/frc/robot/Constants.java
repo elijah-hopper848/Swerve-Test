@@ -17,14 +17,20 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
   public static class MotorIds {
-    public static final int driveFLMotorId = 10;
-    public static final int driveFRMotorId = 11;
-    public static final int driveBLMotorId = 12;
-    public static final int driveBRMotorId = 13;
+    public static final int driveFL = 10;
+    public static final int driveFR = 11;
+    public static final int driveBL = 12;
+    public static final int driveBR = 13;
 
-    public static final int turningFLMotorId = 14;
-    public static final int turningFRMotorId = 15;
-    public static final int turningBLMotorId = 16;
-    public static final int turningBRMotorId = 17;
+    public static final int turnFL = 14;
+    public static final int turnFR = 15;
+    public static final int turnBL = 16;
+    public static final int turnBR = 17;
+  }
+  public static class EncoderIds { 
+    public static final int turnEncoderFL = 20;
+    public static final int turnEncoderFR = 21;
+    public static final int turnEncoderBL = 22;
+    public static final int turnEncoderBR = 23;
   }
 }
