@@ -17,42 +17,50 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.controller.PIDController;
 
 public class SwerveModule {
-  private static final SparkMaxConfig driveConfig = new SparkMaxConfig();
+  private static final SparkMaxConfig s_driveConfig = new SparkMaxConfig();
 
-  private final SparkMax driveMotor;
-  private final SparkMax turnMotor;
-  private final Translation2d position;
-  private final CANcoder encoder;
-  private final PIDController turnPID;
+  private final Translation2d m_offset;
+  private final SparkMax m_driveMotor;
+  private final SparkMax m_turnMotor;
+  private final CANcoder m_encoder;
+  private final PIDController m_turnPID;
   
-  public SwerveModule(int driveId, int turnId, int encoderid, Translation2d offset) {
-    driveConfig.idleMode(IdleMode.kBrake);
-    driveConfig.smartCurrentLimit(159);
-    driveConfig.voltageCompensation(12);
+  public SwerveModule(int driveId, int turnId, int encoderId, Translation2d offset) {
+    s_driveConfig.idleMode(IdleMode.kBrake);
+    s_driveConfig.smartCurrentLimit(159);
+    s_driveConfig.voltageCompensation(12);
 
-    driveMotor = new SparkMax(driveId, MotorType.kBrushless);
-    turnMotor = new SparkMax(turnId, MotorType.kBrushless);
-    encoder = new CANcoder(encoderid);
+    m_driveMotor = new SparkMax(driveId, MotorType.kBrushless);
+    m_turnMotor = new SparkMax(turnId, MotorType.kBrushless);
+    m_encoder = new CANcoder(encoderId);
 
-    turnPID = new PIDController(1, 1, 1);
-    turnPID.enableContinuousInput(-Math.PI, Math.PI);
+    m_turnPID = new PIDController(1, 1, 1);
+    m_turnPID.enableContinuousInput(-Math.PI, Math.PI);
 
-    driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    turnMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_driveMotor.configure(s_driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_turnMotor.configure(s_driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    position = offset;
+    m_offset = offset;
+  }
+
+  private double getPerpendicularOffsetAngle() {
+    return Math.atan2(m_offset.getY(), m_offset.getX()) - (Math.PI / 2);
   }
 
   public void updateMotors(double leftJoystickX, double leftJoystickY, double rightJoystickX) {
-    double rotationVectorAngle = Math.atan2(position.getY(), position.getX()) - (Math.PI / 2);
+    // calculate the perpendicular angle (angle of the turning vector) of the module's offset
+    double turnVectorAngle = getPerpendicularOffsetAngle();
     
-    double desiredSpeedX = leftJoystickX + Math.cos(rotationVectorAngle) * rightJoystickX;
-    double desiredSpeedY = leftJoystickY + Math.sin(rotationVectorAngle) * rightJoystickX;
+    // add scaled turn vector to the raw left joystick input
+    double desiredSpeedX = leftJoystickX + Math.cos(turnVectorAngle) * rightJoystickX;
+    double desiredSpeedY = leftJoystickY + Math.sin(turnVectorAngle) * rightJoystickX;
 
+    // calculate desired angle and speed for motors
     double desiredAngle = Math.atan2(desiredSpeedY, desiredSpeedX);
     double desiredSpeed = Math.hypot(desiredSpeedX, desiredSpeedY);
-
-    turnMotor.setVoltage(turnPID.calculate(encoder.getAbsolutePosition().getValueAsDouble(), desiredAngle));
-    driveMotor.set(desiredSpeed);
+    
+    // update the motors
+    m_turnMotor.setVoltage(m_turnPID.calculate(m_encoder.getAbsolutePosition().getValueAsDouble(), desiredAngle));
+    m_driveMotor.set(desiredSpeed);
   }
 }
