@@ -60,6 +60,8 @@ public class SwerveModule {
     double desiredSpeed = Math.hypot(desiredSpeedX, desiredSpeedY);
     
     // update the motors
+    // TODO: this needs to be converted to angles, currently it's in rotation which i'm pretty sure is a bad thing
+    // i think
     m_turnMotor.setVoltage(m_turnPID.calculate(m_encoder.getAbsolutePosition().getValueAsDouble(), desiredAngle));
     m_driveMotor.set(desiredSpeed);
   }
