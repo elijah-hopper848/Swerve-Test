@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.SwerveS;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
@@ -27,7 +28,6 @@ public class SwerveC extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //anyways
     m_SwerveS.drive(
       RobotContainer.m_driverController.getLeftX(), 
       RobotContainer.m_driverController.getLeftY(),

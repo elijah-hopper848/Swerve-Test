@@ -4,41 +4,44 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Translation2d;
 
 import edu.wpi.first.math.controller.PIDController;
 
 public class SwerveModule {
-  private static final SparkMaxConfig s_driveConfig = new SparkMaxConfig();
-
   private final Translation2d m_offset;
-  private final SparkMax m_driveMotor;
-  private final SparkMax m_turnMotor;
+  private final TalonFX m_driveMotor;
+  private final TalonFX m_turnMotor;
   private final CANcoder m_encoder;
   private final PIDController m_turnPID;
   
   public SwerveModule(int driveId, int turnId, int encoderId, Translation2d offset) {
-    s_driveConfig.idleMode(IdleMode.kBrake);
-    s_driveConfig.smartCurrentLimit(159);
-    s_driveConfig.voltageCompensation(12);
+    TalonFXConfiguration config = new TalonFXConfiguration();
 
-    m_driveMotor = new SparkMax(driveId, MotorType.kBrushless);
-    m_turnMotor = new SparkMax(turnId, MotorType.kBrushless);
+    // Example configurations
+    config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    config.CurrentLimits.SupplyCurrentLimitEnable = true;
+    config.CurrentLimits.SupplyCurrentLimit = 40; // Amps
+    config.Voltage.PeakForwardVoltage = 10.0;
+    config.Voltage.PeakReverseVoltage = -10.0;
+
+    
+    m_driveMotor = new TalonFX(driveId);
+    m_turnMotor = new TalonFX(turnId);
     m_encoder = new CANcoder(encoderId);
-
-    m_turnPID = new PIDController(1, 1, 1);
+    
+    m_turnPID = new PIDController(20, 0, 0);
     m_turnPID.enableContinuousInput(-Math.PI, Math.PI);
-
-    m_driveMotor.configure(s_driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    m_turnMotor.configure(s_driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    
+    m_driveMotor.getConfigurator().apply(config);
+    m_turnMotor.getConfigurator().apply(config);
 
     m_offset = offset;
   }
@@ -59,8 +62,10 @@ public class SwerveModule {
     double desiredAngle = Math.atan2(desiredSpeedY, desiredSpeedX);
     double desiredSpeed = Math.hypot(desiredSpeedX, desiredSpeedY);
     
+    // System.out.println(desiredSpeed);
+
     // update the motors
     m_turnMotor.setVoltage(m_turnPID.calculate(m_encoder.getAbsolutePosition().getValueAsDouble() * Math.PI, desiredAngle));
-    m_driveMotor.set(desiredSpeed);
+    m_driveMotor.set(0.3);
   }
 }
